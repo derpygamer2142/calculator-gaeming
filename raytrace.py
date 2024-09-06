@@ -1,4 +1,4 @@
-import math
+import math, ti_draw # type: ignore
 
 def norm(v):
     mag=math.sqrt(v[0]**2 + v[1]**2 + v[2]**2)
@@ -38,6 +38,8 @@ epsilon=0.001
 #densities=".:-=+*#%@"
 densities=".'`^\",:;Il!i><~+_-?][}{1)(|\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao#MW&8%B@$"
 lv=norm([1,1,1])
+
+
 for yi in range(-res,res):
     y=(yi/res)*dim[1]
     output=""
