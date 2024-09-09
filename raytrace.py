@@ -1,4 +1,4 @@
-import math#, ti_draw # type: ignore
+import math, ti_draw # type: ignore
 
 def norm(v):
     mag=math.sqrt(v[0]**2 + v[1]**2 + v[2]**2)
@@ -48,36 +48,36 @@ epsilon=0.001
 #densities=".:-=+*#%@"
 densities=".'`^\",:;Il!i><~+_-?][}{1)(|\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao#MW&8%B@$"
 lv=norm([1,1,1])
-#ti_draw.clear()
+ti_draw.clear()
 
 for yi in range(0,dim[1]+1,res):
     y=my(yi)
     #output=""
     for xi in range(0,dim[0]+1,res):
         x=mx(xi)
-        #print(x,y)
         rv=norm([x,y,focalLength])
         rp=sp([0,0,0],rv)
-        for i in range(0,50): sp([0,0,0],rv)
         if (rp[0] != None):
             #hit
             n=norm(sv([0,0,100],rp))
             half=norm(av(lv,rv))
             specular=math.pow(max(dot(half,n),0),16)
-            l=math.max(math.min(math.max(dot(n,lv),0),1) + specular,0)#(dot(n,lv)+1)/2
-            '''try:
-                ti_draw.set_color(math.floor(l*255),math.floor(l*255),math.floor(l*255))
+            l=max(max(dot(n,lv),0)+specular,0)#(dot(n,lv)+1)/2  
+            del n, specular, half
+            try:
+                ti_draw.set_color(math.floor(l*254),math.floor(l*254),math.floor(l*254))
             except:
                 raise Exception(str(math.floor(l*254)))
-            '''
+            
             #output+=densities[round((l+1)/2*(len(densities)-1))]
             #output+="x"
-        #else:
-            #output+="."
-            #ti_draw.set_color(0,0,0)
-        #ti_draw.fill_rect(xi,yi,res+1,res+1)
-        #output+=" "
+        else:
+            # output+="."
+            ti_draw.set_color(0,0,0)
+        ti_draw.fill_rect(xi,yi,res+1,res+1)
+        del x, rv, rp
+        # output+=" "
 
     #print(output)
 
-#ti_draw.show_draw()
+ti_draw.show_draw()
