@@ -1,4 +1,4 @@
-import math, ti_draw # type: ignore
+import math#, ti_draw # type: ignore
 
 def norm(v):
     mag=math.sqrt(v[0]**2 + v[1]**2 + v[2]**2)
@@ -9,6 +9,9 @@ def mv(v,s):
 
 def sv(v,b):
     return [v[0]-b[0],v[1]-b[1],v[2]-b[2]]
+
+def av(v,b):
+    return [v[0]+b[0],v[1]+b[1],v[2]+b[2]]
 
 def dot(a,b):
     return (a[0]*b[0])+(a[1]*b[1])+(a[2]*b[2])
@@ -25,36 +28,56 @@ def srt(ro,rd,ce,ra): # https://iquilezles.org/articles/intersectors/
     return [-b-h,-b+h]
 
 def sp(ro,rv):
-    dist=srt(ro,rv,[0,0,100],55)
+    dist=srt(ro,rv,[0,0,100],65)
     if (dist[1]<0): return [None]
     elif (dist[0]<0): return mv(rv,dist[1])
     else: return mv(rv,dist[0])
 
+def mx(x): return x-160
+def my(y): return y-105
+
+
+
+
 focalLength=120
-res=8
+res=int(input("Resolution? "))
 renderDist=300
-dim=[100,100]
+dim=[319,209] 
+
 epsilon=0.001
 #densities=".:-=+*#%@"
 densities=".'`^\",:;Il!i><~+_-?][}{1)(|\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao#MW&8%B@$"
 lv=norm([1,1,1])
+#ti_draw.clear()
 
-
-for yi in range(-res,res):
-    y=(yi/res)*dim[1]
-    output=""
-    for xi in range(-res,res):
-        x=(xi/res)*dim[0]
+for yi in range(0,dim[1]+1,res):
+    y=my(yi)
+    #output=""
+    for xi in range(0,dim[0]+1,res):
+        x=mx(xi)
+        #print(x,y)
         rv=norm([x,y,focalLength])
         rp=sp([0,0,0],rv)
+        for i in range(0,50): sp([0,0,0],rv)
         if (rp[0] != None):
             #hit
             n=norm(sv([0,0,100],rp))
-            l=dot(n,lv)
-            output+=densities[round((l+1)/2*(len(densities)-1))]
+            half=norm(av(lv,rv))
+            specular=math.pow(max(dot(half,n),0),16)
+            l=math.max(math.min(math.max(dot(n,lv),0),1) + specular,0)#(dot(n,lv)+1)/2
+            '''try:
+                ti_draw.set_color(math.floor(l*255),math.floor(l*255),math.floor(l*255))
+            except:
+                raise Exception(str(math.floor(l*254)))
+            '''
+            #output+=densities[round((l+1)/2*(len(densities)-1))]
             #output+="x"
-        else:
-            output+="."
-        output+=" "
+        #else:
+            #output+="."
+            #ti_draw.set_color(0,0,0)
+        #ti_draw.fill_rect(xi,yi,res+1,res+1)
+        #output+=" "
 
-    print(output)
+    #print(output)
+
+#ti_draw.show_draw()
