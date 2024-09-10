@@ -36,7 +36,18 @@ def sp(ro,rv):
 def mx(x): return x-160
 def my(y): return y-105
 
+def saturate(x): return min(1,max(0,x))
 
+def tonemap(col):
+    a = 2.51
+    b = 0.03
+    c = 2.43
+    d = 0.59
+    e = 0.14
+    out=[]
+    for i in col:
+        out.append(saturate((i*(a*i+b))/(i*(c*i+d)+e)))
+    return out
 
 
 focalLength=120
@@ -49,6 +60,7 @@ epsilon=0.001
 densities=".'`^\",:;Il!i><~+_-?][}{1)(|\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao#MW&8%B@$"
 lv=norm([1,1,1])
 ti_draw.clear()
+err=False
 
 for yi in range(0,dim[1]+1,res):
     y=my(yi)
@@ -62,12 +74,15 @@ for yi in range(0,dim[1]+1,res):
             n=norm(sv([0,0,100],rp))
             half=norm(av(lv,rv))
             specular=math.pow(max(dot(half,n),0),16)
-            l=max(max(dot(n,lv),0)+specular,0)#(dot(n,lv)+1)/2  
+            l=max(max(dot(n,lv),0)+specular,0) #(dot(n,lv)+1)/2 
+            cout = tonemap([l,l,l])
+            del l
             del n, specular, half
             try:
-                ti_draw.set_color(math.floor(l*254),math.floor(l*254),math.floor(l*254))
+                ti_draw.set_color(math.floor(cout[0]*254),math.floor(cout[1]*254),math.floor(cout[2]*254))
             except:
-                raise Exception(str(math.floor(l*254)))
+                err=True
+                raise Exception(str(cout))
             
             #output+=densities[round((l+1)/2*(len(densities)-1))]
             #output+="x"
@@ -76,8 +91,9 @@ for yi in range(0,dim[1]+1,res):
             ti_draw.set_color(0,0,0)
         ti_draw.fill_rect(xi,yi,res+1,res+1)
         del x, rv, rp
+        if err: break
         # output+=" "
-
+    if err: break
     #print(output)
 
-ti_draw.show_draw()
+if not err: ti_draw.show_draw()

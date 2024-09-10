@@ -7,8 +7,12 @@
 # ti_draw.fill_rect(-15,-15,30,30)
 # ti_draw.show_draw()
 import ti_image # type: ignore
-def tx(x): return ((x+100)/200)*319
-def ty(y): return ((y+100)/200)*209
-ti_image.load_image("DOG")
-ti_image.show_image(tx(-50),ty(-50))
+def tx(x): return x+160
+def ty(y): return 105-y
+ti_image.clear_image()
+ti_image.set_pixel(tx(0),ty(0),(255,0,0))
+ti_image.set_pixel(tx(-1),ty(0),(255,0,0))
+ti_image.set_pixel(tx(1),ty(0),(255,0,0))
+ti_image.set_pixel(tx(0),ty(-1),(255,0,0))
+ti_image.set_pixel(tx(0),ty(1),(255,0,0))
 ti_image.show_screen()
