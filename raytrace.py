@@ -73,7 +73,7 @@ for yi in range(0,dim[1]+1,res):
             #hit
             n=norm(sv([0,0,100],rp))
             half=norm(av(lv,rv))
-            specular=math.pow(max(dot(half,n),0),16)
+            specular=math.pow(max(dot(half,n),0),16)*2
             l=max(max(dot(n,lv),0)+specular,0) #(dot(n,lv)+1)/2 
             cout = tonemap([l,l,l])
             del l
